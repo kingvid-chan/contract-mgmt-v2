@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ '编辑合同' if contract else '新建合同' }} - 合同管理系统{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <h2>{{ '编辑合同' if contract else '新建合同' }}</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">合同标题 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="title" name="title"
+                       value="{{ contract.title if contract else '' }}" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="counterparty" class="form-label">对方单位 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="counterparty" name="counterparty"
+                       value="{{ contract.counterparty if contract else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">合同金额 (¥)</label>
+                <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="0"
+                       value="{{ '%.2f'|format(contract.amount) if contract and contract.amount else '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">合同状态</label>
+                <select class="form-select" id="status" name="status">
+                    {% set statuses = [("draft", "草稿"), ("active", "生效中"), ("completed", "已完成"), ("terminated", "已终止")] %}
+                    {% for val, label in statuses %}
+                    <option value="{{ val }}" {% if contract and contract.status == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">合同描述</label>
+                <textarea class="form-control" id="description" name="description" rows="4">{{ contract.description if contract else '' }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="attachment" class="form-label">附件 (PDF/DOC/DOCX, 最大10MB)</label>
+                <input type="file" class="form-control" id="attachment" name="attachment"
+                       accept=".pdf,.doc,.docx">
+                {% if contract %}
+                <small class="text-muted">不上传新文件则保留现有附件</small>
+                {% endif %}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">{{ '保存修改' if contract else '创建合同' }}</button>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary">取消</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

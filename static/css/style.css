@@ -1,0 +1,104 @@
+/* Contract Management System - Custom Styles */
+
+:root {
+    --primary-dark: #1a56db;
+}
+
+/* General layout */
+body {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Card styling */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Table improvements */
+.table th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Status badges */
+.badge {
+    font-weight: 500;
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: #4f8ef7;
+    box-shadow: 0 0 0 0.2rem rgba(31, 95, 216, 0.15);
+}
+
+/* Alerts */
+.alert {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+/* Footer spacing */
+.container.mt-3 {
+    padding-bottom: 2rem;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767.98px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+
+    h2 {
+        font-size: 1.35rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    /* Stack actions on mobile */
+    .d-flex.gap-2 {
+        flex-wrap: wrap;
+    }
+
+    /* Make detail page labels smaller */
+    .card-body table td.fw-bold {
+        width: 80px !important;
+    }
+}
+
+/* Print-friendly */
+@media print {
+    .navbar, .btn, form, .alert {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #dee2e6 !important;
+    }
+}

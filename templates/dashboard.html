@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}合同列表 - 合同管理系统{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">📄 合同列表</h2>
+    <a href="{{ url_for('main.contract_create') }}" class="btn btn-primary">+ 新建合同</a>
+</div>
+
+{% if contracts %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>标题</th>
+                <th>对方单位</th>
+                <th>金额</th>
+                <th>状态</th>
+                {% if current_user.is_admin() %}
+                <th>创建者</th>
+                {% endif %}
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contract in contracts %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('main.contract_detail', contract_id=contract.id) }}" class="text-decoration-none">
+                        {{ contract.title }}
+                    </a>
+                </td>
+                <td>{{ contract.counterparty }}</td>
+                <td>{{ "¥{:,.2f}".format(contract.amount) if contract.amount else "-" }}</td>
+                <td>
+                    {% set status_map = {"draft": "secondary", "active": "success", "completed": "info", "terminated": "dark"} %}
+                    {% set status_label = {"draft": "草稿", "active": "生效中", "completed": "已完成", "terminated": "已终止"} %}
+                    <span class="badge bg-{{ status_map.get(contract.status, 'secondary') }}">
+                        {{ status_label.get(contract.status, contract.status) }}
+                    </span>
+                </td>
+                {% if current_user.is_admin() %}
+                <td>{{ contract.owner.username }}</td>
+                {% endif %}
+                <td class="text-nowrap small">{{ contract.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td class="text-nowrap">
+                    <a href="{{ url_for('main.contract_detail', contract_id=contract.id) }}" class="btn btn-sm btn-outline-primary">查看</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5">
+    <p class="text-muted fs-5">暂无合同</p>
+    <a href="{{ url_for('main.contract_create') }}" class="btn btn-primary">创建第一个合同</a>
+</div>
+{% endif %}
+{% endblock %}

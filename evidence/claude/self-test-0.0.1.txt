@@ -1,0 +1,60 @@
+Contract Management System v0.0.1 - Self Test Results
+========================================================
+
+Date: 2026-06-20
+Branch: iteration/0.0.1
+Server: Flask 3.1.0 on port 19051
+Base Path: /projects/contract-mgmt-v2/
+Database: SQLite (data/app.db)
+
+Test Results: 26 PASSED, 0 FAILED
+
+------------------------------------------------------------
+Authentication & Session Management
+------------------------------------------------------------
+✓ GET /healthz → 200 ok
+✓ GET /auth/login → 200 HTML, Cache-Control: no-cache
+✓ POST /auth/login admin → 200, dashboard shown
+✓ POST /auth/login demo/demo123 → 200, dashboard shown
+✓ POST /auth/login wrong password → 200, error shown
+✓ POST /auth/register → 200, '注册成功' shown on login page
+✓ POST /auth/register duplicate → 200, '用户名已存在' shown
+✓ GET /auth/logout → 200, login page shown
+✓ GET / unauthenticated → redirected to login page
+
+------------------------------------------------------------
+Contract CRUD
+------------------------------------------------------------
+✓ POST /contracts/create → 200, contract detail shown
+✓ GET /contracts/1 → 200, shows contract detail
+✓ POST /contracts/1/edit → 200, updated detail shown
+✓ POST /contracts/1/delete → 200, back to dashboard
+
+------------------------------------------------------------
+Attachment Upload & Download
+------------------------------------------------------------
+✓ POST /contracts/1/attachments/upload → 200, filename shown
+✓ GET /attachments/1/download → 200, file served
+✓ POST upload non-PDF → 200, '仅支持 PDF、DOC、DOCX' error shown
+
+------------------------------------------------------------
+Role-Based Access Control
+------------------------------------------------------------
+✓ GET /admin/users by regular user → denied
+✓ GET /admin/users by demo → denied
+✓ GET /admin/users → 200, shows admin/demo/newuser
+✓ POST /admin/users/3/toggle → 200, user status toggled
+✓ GET / by regular user → only own contracts visible
+
+------------------------------------------------------------
+Static Assets & Caching
+------------------------------------------------------------
+✓ GET /static/css/style.css?v=0.0.1 → 200
+✓ GET /static/js/app.js?v=0.0.1 → 200
+✓ Cache-Control: no-cache header present on HTML responses
+
+------------------------------------------------------------
+Preset Accounts
+------------------------------------------------------------
+✓ admin / admin123 (role: admin) - login succeeds
+✓ demo / demo123 (role: user) - login succeeds, admin access denied

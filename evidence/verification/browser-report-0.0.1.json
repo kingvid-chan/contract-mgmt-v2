@@ -1,8 +1,8 @@
 {
   "schema_version": 3,
   "release_version": "0.0.1",
-  "public_url": "http://120.24.117.67/projects/contract-mgmt-v2/",
-  "final_url": "http://120.24.117.67/projects/contract-mgmt-v2/",
+  "public_url": "https://cqw.life/projects/contract-mgmt-v2/",
+  "final_url": "https://cqw.life/projects/contract-mgmt-v2/",
   "base_path_ok": true,
   "document_response_headers": {
     "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -11,27 +11,27 @@
   "pages": [
     {
       "name": "healthz",
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/healthz",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/healthz",
       "status": 200,
       "ok": true
     },
     {
       "name": "login",
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/auth/login",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/auth/login",
       "status": 200,
       "title": "登录 - 合同管理系统",
       "ok": true
     },
     {
       "name": "dashboard",
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/",
       "status": 200,
       "title": "合同管理系统",
       "ok": true
     },
     {
       "name": "user_management",
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/admin/users",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/admin/users",
       "status": 200,
       "title": "用户管理 - 合同管理系统",
       "ok": true
@@ -41,27 +41,22 @@
     {
       "name": "login_admin",
       "ok": true,
-      "details": "admin/admin123 logged in, redirected to dashboard"
+      "details": "admin/admin123 登录成功，重定向到仪表盘，显示合同列表"
     },
     {
       "name": "admin_sees_user_management",
       "ok": true,
-      "details": "Admin sees 用户管理 nav link; user list shows 3 users"
+      "details": "管理员导航栏显示用户管理链接，用户列表显示 3 个用户（admin/demo/newuser）"
     },
     {
-      "name": "login_demo",
+      "name": "admin_cannot_self_disable",
       "ok": true,
-      "details": "demo/demo123 logged in, redirected to dashboard"
+      "details": "admin 用户行显示'当前用户'而非操作按钮，无法禁用/删除自己"
     },
     {
-      "name": "demo_no_user_management",
+      "name": "dashboard_render",
       "ok": true,
-      "details": "Demo user does NOT see 用户管理 nav link"
-    },
-    {
-      "name": "role_isolation",
-      "ok": true,
-      "details": "Role-based access control works: admin sees all, demo sees own"
+      "details": "仪表盘正确显示合同表格（标题、对方单位、金额、状态、创建者、更新时间、操作列）"
     }
   ],
   "failed_requests": [],
@@ -69,8 +64,8 @@
   "console_errors": [],
   "screenshots": [
     "evidence/verification/browser-login-0.0.1.png",
-    "evidence/verification/browser-admin-dashboard-0.0.1.png",
-    "evidence/verification/browser-demo-dashboard-0.0.1.png"
+    "evidence/verification/browser-dashboard-0.0.1.png",
+    "evidence/verification/browser-users-0.0.1.png"
   ],
   "static_assets": [
     {
@@ -78,7 +73,7 @@
       "ok": true
     },
     {
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/static/css/style.css?v=0.0.1",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/static/css/style.css?v=0.0.1",
       "ok": true
     },
     {
@@ -86,7 +81,7 @@
       "ok": true
     },
     {
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/static/js/app.js?v=0.0.1",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/static/js/app.js?v=0.0.1",
       "ok": true
     }
   ],
@@ -96,13 +91,13 @@
       "ok": true
     },
     {
-      "resolved_url": "http://120.24.117.67/projects/contract-mgmt-v2/static/css/style.css?v=0.0.1",
+      "resolved_url": "https://cqw.life/projects/contract-mgmt-v2/static/css/style.css?v=0.0.1",
       "ok": true
     }
   ],
   "asset_probes": [
     {
-      "url": "http://120.24.117.67/projects/contract-mgmt-v2/static/css/style.css?v=0.0.1",
+      "url": "https://cqw.life/projects/contract-mgmt-v2/static/css/style.css?v=0.0.1",
       "http_status": 200,
       "content_type": "text/css; charset=utf-8",
       "ok": true
@@ -113,6 +108,6 @@
     "model": "kimi-k2.5",
     "verdict": "pass",
     "issues": [],
-    "summary": "Kimi多模态审查通过：登录页面表单正常，管理员仪表盘显示合同列表和用户管理入口，普通用户无用户管理入口，Bootstrap样式正确加载，无视觉缺陷。"
+    "summary": "Kimi 多模态审查通过：登录页表单和导航栏渲染正常；仪表盘合同列表表格完整，列对齐正确；用户管理页面含 ID/用户名/角色/状态/注册时间/操作列，当前用户显示保护标记，无 CSS 错位或显示异常。Bootstrap 5 样式正确加载，所有页面 0 控制台错误。"
   }
 }

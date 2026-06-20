@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-06-20T06:11:08Z",
+  "health_url": "https://120.24.117.67/projects/contract-mgmt-v2/healthz",
+  "http_status": 200,
+  "response": {
+    "status": "ok",
+    "version": "0.0.1"
+  },
+  "ok": true
+}

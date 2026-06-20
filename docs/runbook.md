@@ -1,34 +1,80 @@
-# {{PROJECT_NAME}} 运行手册
+# 合同管理系统 (contract-mgmt-v2) 运行手册
 
 ## 本地安装与启动
 
+```bash
+# 安装依赖
+pip install -r requirements.txt
+
+# 初始化数据库（建表 + 预置 admin/demo 账号）
+python init_db.py
+
+# 启动开发服务器
+python app.py
+# 服务运行在 http://localhost:19051/projects/contract-mgmt-v2/
+```
+
 ## 测试、构建与健康检查
 
-记录自动测试、生产启动、health endpoint、公网浏览器关键流程、静态资源、
-控制台错误和 Kimi 截图视觉验收方式。
+```bash
+# 健康检查
+curl http://localhost:19051/projects/contract-mgmt-v2/healthz
+# → {"status":"ok","version":"0.0.1"}
+
+# 运行自动化测试
+python /tmp/run_final.py  # 或使用 evidence/claude/ 下的测试脚本
+
+# 手动测试登录
+curl -c /tmp/cookies.txt -L -d "username=admin&password=admin123" \
+  http://localhost:19051/projects/contract-mgmt-v2/auth/login
+```
 
 ## 环境变量
 
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| SECRET_KEY | contract-mgmt-v2-dev-key-... | Flask session 签名密钥 |
+| DATABASE_URL | sqlite:///data/app.db | 数据库连接 |
+
 ## Base Path
 
-项目必须支持 `/projects/{{PROJECT_SLUG}}/`，静态资源和前端路由不得假设部署在 `/`。
+项目部署在 `/projects/contract-mgmt-v2/`，静态资源和路由不假设部署在 `/`。
 
-公网浏览器验收时，最终 URL 和所有项目资源必须保留此前缀。
+- 开发: `http://localhost:19051/projects/contract-mgmt-v2/`
+- 生产: `https://cqw.life/projects/contract-mgmt-v2/`
 
 ## 缓存策略
 
-功能迭代后公网 URL 不变，必须防止老板浏览器命中缓存旧页面：
+- HTML 响应头: `Cache-Control: no-cache, no-store, must-revalidate`
+- 静态资源: `?v=0.0.1` 版本令牌（随迭代递增）
+- **不能**用 `<meta>` 标签代替真实 HTTP 响应头
 
-- HTML 文档**真实 HTTP 响应头**必须携带 `Cache-Control: no-cache`（或 `no-store`），每次重新校验；**不得仅用 `<meta http-equiv>` 标签**（浏览器基本忽略其缓存语义），必须由服务器/框架下发响应头；
-- 所有静态资源 URL 必须携带版本令牌 `?v=<当前发布版本 0.0.N>`，且路径保留 `/projects/{{PROJECT_SLUG}}/` 前缀（令牌挂在已带 basePath 的 URL 上）；
-- 版本令牌随 `0.0.N` 递增，于是每个交付版本自动触发缓存失效。
+## 预置账号
 
-浏览器验收（schema v3 机器报告）会逐条重算：`static_assets` 状态码 200–399、URL 带版本令牌且在 basePath 下（自包含页面可为空），`document_response_headers` 的真实 `Cache-Control` 为 no-cache/no-store，视觉审查须由 Kimi 视觉模型完成。
+| 用户名 | 密码 | 角色 |
+|--------|------|------|
+| admin | admin123 | 管理员 |
+| demo | demo123 | 普通用户 |
 
 ## Aliyun systemd 与 Nginx
 
+服务名: `codingagent-contract-mgmt-v2`
+部署根目录: `/srv/codingagent/contract-mgmt-v2/`
+端口: 19051
+
 ## 日志查看
+
+Flask 开发服务器日志直接输出到 stdout/stderr。
+生产环境使用 systemd journal: `journalctl -u codingagent-contract-mgmt-v2 -f`
 
 ## 常见故障与恢复
 
-## 回滚到精确 Tag
+| 问题 | 解决 |
+|------|------|
+| 端口占用 | `lsof -ti:19051 \| xargs kill` |
+| 数据库损坏 | 删除 `data/app.db`，重新运行 `python init_db.py` |
+| 附件丢失 | 备份 `uploads/` 目录，定期同步 |
+
+## 回滚
+
+Git tag 策略待后续迭代建立。当前通过 `git checkout` 回到目标 commit。
